@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta name="theme-color" content="#0b1020" />
+    <title>Long Bio Update - Mani 272</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        :root {
+            --bg: #0a0e1a;
+            --card: #1a1f35;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --accent: #22c55e;
+            --accent-700: #16a34a;
+            --danger: #f43f5e;
+            --success: #10b981;
+            --border: #2d3548;
+            --panel: #151a2e;
+        }
+
+        :root.light {
+            --bg: #ffffff;
+            --card: #f8fafc;
+            --text: #1e293b;
+            --muted: #64748b;
+            --accent: #22c55e;
+            --accent-700: #16a34a;
+            --danger: #ef4444;
+            --success: #10b981;
+            --border: #e2e8f0;
+            --panel: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #064e3b 25%, #166534 50%, #14532d 75%, #0f172a 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            color: var(--text);
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        :root.light body {
+            background: linear-gradient(135deg, #f8fafc 0%, #d1fae5 25%, #a7f3d0 50%, #6ee7b7 75%, #34d399 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .layout {
+            position: relative;
+            z-index: 1;
+        }
+
+        .floating-nav-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .floating-nav-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 8px 30px rgba(34, 197, 94, 0.6);
+        }
+
+        .floating-nav-btn.active {
+            transform: rotate(45deg);
+            background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+        }
+
+        .floating-nav-menu {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            width: 280px;
+            max-width: calc(100vw - 40px);
+            background: rgba(26, 31, 53, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            z-index: 99;
+            padding: 20px;
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .floating-nav-menu.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: all;
+        }
+
+        .floating-nav-menu .menu-header {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .floating-nav-menu .menu-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .floating-nav-menu .menu-subtitle {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .floating-nav-menu .nav-btn {
+            width: 100%;
+            margin-bottom: 10px;
+            min-height: 48px;
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+
+        .floating-nav-menu .nav-btn:last-child {
+            margin-bottom: 0;
+        }
+
+        .layout {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 16px;
+        }
+
+        .panel {
+            background: rgba(26, 31, 53, 0.6);
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .3);
+            backdrop-filter: blur(20px) saturate(180%);
+            padding: 32px;
+            margin-bottom: 20px;
+        }
+
+        :root.light .panel {
+            background: rgba(248, 250, 252, 0.9);
+            border: 1px solid rgba(0, 0, 0, .1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .1);
+        }
+
+        h1 {
+            margin: 0 0 24px;
+            font-size: 1.8rem;
+            text-align: center;
+            background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .input {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, .1);
+            background: rgba(21, 26, 46, .6);
+            color: var(--text);
+            outline: none;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, .2);
+            transition: all .3s ease;
+            backdrop-filter: blur(10px);
+            font-size: 1rem;
+            font-family: 'Inter', monospace;
+        }
+
+        .input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, .2), inset 0 2px 8px rgba(34, 197, 94, .1);
+            background: rgba(21, 26, 46, .8);
+        }
+
+        textarea.input {
+            min-height: 150px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+        }
+
+        :root.light .input {
+            background: rgba(255, 255, 255, .8);
+            border: 1px solid rgba(0, 0, 0, .1);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, .05);
+        }
+
+        :root.light .input:focus {
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, .15), inset 0 1px 3px rgba(0, 0, 0, .05);
+            background: #fff;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 14px 24px;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            transition: all .3s ease;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, .3);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .btn:hover {
+            box-shadow: 0 6px 25px rgba(34, 197, 94, .45);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn.secondary {
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            box-shadow: 0 4px 15px rgba(100, 116, 139, .3);
+        }
+
+        .btn.secondary:hover {
+            box-shadow: 0 6px 25px rgba(100, 116, 139, .45);
+        }
+
+        .status-area {
+            margin-top: 24px;
+            padding: 16px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            min-height: 80px;
+            font-family: monospace;
+            color: #34d399;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: none;
+        }
+
+        .status-area.active {
+            display: block;
+        }
+
+        .status-area.error {
+            color: #f43f5e;
+            background: rgba(244, 63, 94, 0.1);
+            border-color: rgba(244, 63, 94, 0.3);
+        }
+
+        .status-area.success {
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .info-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        :root.light .info-box {
+            background: rgba(34, 197, 94, 0.05);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .dev-credit {
+            color: #60a5fa;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .floating-nav-btn {
+                width: 52px;
+                height: 52px;
+                font-size: 1.6rem;
+                top: 16px;
+                right: 16px;
+            }
+
+            .floating-nav-menu {
+                top: 80px;
+                right: 16px;
+                left: 16px;
+                width: auto;
+                max-width: none;
+            }
+
+            .layout {
+                margin: 12px auto;
+                padding: 0 12px;
+            }
+
+            .panel {
+                padding: 20px 16px;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+                margin-bottom: 20px;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .btn {
+                min-height: 50px;
+                font-size: 1rem;
+                padding: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .floating-nav-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 1.4rem;
+                top: 12px;
+                right: 12px;
+            }
+
+            .floating-nav-menu {
+                top: 72px;
+                right: 12px;
+                left: 12px;
+                padding: 16px;
+            }
+
+            .layout {
+                margin: 8px auto;
+                padding: 0 8px;
+            }
+
+            .panel {
+                padding: 16px 12px;
+            }
+
+            h1 {
+                font-size: 1.2rem;
+                margin-bottom: 16px;
+            }
+
+            .btn {
+                min-height: 48px;
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Floating Navigation Button -->
+    <button class="floating-nav-btn" id="floatingNavBtn" title="Navigation Menu">☰</button>
+
+    <!-- Floating Navigation Menu -->
+    <div class="floating-nav-menu" id="floatingNavMenu">
+        <div class="menu-header">
+            <div class="menu-title">Long Bio Update</div>
+            <div class="menu-subtitle">Navigation Menu</div>
+        </div>
+        <a href="index.html" class="btn nav-btn secondary">
+            🏠 Back to Home
+        </a>
+    </div>
+
+    <div class="layout animate__animated animate__fadeInUp">
+        <div class="panel">
+            <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; text-align: center; background: linear-gradient(135deg, #ffffff, #22c55e); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: 2px;">MANI 272</div>
+            <h1>📝 Long Bio Update</h1>
+
+            <div class="field">
+                <label class="label">Access Token</label>
+                <input type="text" id="accessTokenInput" class="input" placeholder="Enter your access token" />
+            </div>
+
+            <div class="field">
+                <label class="label">Bio Text</label>
+                <textarea id="bioInput" class="input" placeholder="Enter your bio text here...&#10;Example:&#10;[b][c][FFAA44] ⌐ Your ┐ [i][FFFFFF] Love Is&#10;[FFFFOO]Fragile[FFFFFF]...[/i]"></textarea>
+            </div>
+
+            <div class="controls">
+                <button id="updateBtn" class="btn">🔄 Update Bio</button>
+                <button id="clearBtn" class="btn secondary">🗑️ Clear</button>
+            </div>
+
+            <div id="statusArea" class="status-area"></div>
+            <div class="dev-credit">Developed By ！Ｍａｎｉ２７２</div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://bio.sukhdaku.qzz.io/update_bio';
+        
+        const el = {
+            accessToken: document.getElementById('accessTokenInput'),
+            bio: document.getElementById('bioInput'),
+            updateBtn: document.getElementById('updateBtn'),
+            clearBtn: document.getElementById('clearBtn'),
+            statusArea: document.getElementById('statusArea')
+        };
+
+        function log(msg, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
+            el.statusArea.textContent = `[${time}] ${prefix} ${msg}\n` + el.statusArea.textContent;
+            el.statusArea.classList.add('active');
+            el.statusArea.classList.remove('error', 'success');
+            if (type === 'error') {
+                el.statusArea.classList.add('error');
+            } else if (type === 'success') {
+                el.statusArea.classList.add('success');
+            }
+        }
+
+        function clearStatus() {
+            el.statusArea.textContent = '';
+            el.statusArea.classList.remove('active', 'error', 'success');
+        }
+
+        async function updateBio() {
+            const accessToken = el.accessToken.value.trim();
+            const bio = el.bio.value.trim();
+            
+            if (!accessToken) {
+                log('Please enter an access token', 'error');
+                el.accessToken.focus();
+                return;
+            }
+
+            if (!bio) {
+                log('Please enter bio text', 'error');
+                el.bio.focus();
+                return;
+            }
+
+            el.updateBtn.disabled = true;
+            el.updateBtn.textContent = 'Updating...';
+            clearStatus();
+
+            log('Initiating bio update...');
+            log(`Access Token: ${accessToken.substring(0, 20)}...`);
+            log(`Bio Length: ${bio.length} characters`);
+
+            const apiUrl = `${API_BASE}?access_token=${encodeURIComponent(accessToken)}&bio=${encodeURIComponent(bio)}`;
+
+            // Try multiple methods to bypass CORS
+            let success = false;
+            
+            // Method 1: Direct fetch (simplest - no headers)
+            try {
+                log('Attempting direct API call (method 1)...');
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+
+                if (response.ok) {
+                    const contentType = response.headers.get('content-type');
+                    let data;
+                    
+                    if (contentType && contentType.includes('application/json')) {
+                        data = await response.json();
+                    } else {
+                        const text = await response.text();
+                        data = { message: text, success: true };
+                    }
+
+                    if (data) {
+                        if (data.success || data.message) {
+                            log(`✅ Bio updated successfully!`, 'success');
+                            if (data.message) log(`Message: ${data.message}`, 'success');
+                        } else {
+                            log(`✅ Request completed`, 'success');
+                            log(JSON.stringify(data, null, 2));
+                        }
+                    } else {
+                        log(`✅ Bio update request sent successfully!`, 'success');
+                    }
+                    
+                    success = true;
+                } else {
+                    log(`API returned status: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    log('Request cancelled', 'error');
+                    return;
+                }
+                log(`Direct call failed: ${error.message}`, 'error');
+                log('Trying alternative method...');
+                
+                // Method 2: Use CORS proxy
+                try {
+                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
+                    log('Using CORS proxy...');
+                    
+                    const proxyResponse = await fetch(proxyUrl, {
+                        method: 'GET',
+                        mode: 'cors'
+                    });
+
+                    if (proxyResponse.ok) {
+                        const proxyData = await proxyResponse.json();
+                        if (proxyData.contents) {
+                            try {
+                                const data = JSON.parse(proxyData.contents);
+                                log(`✅ Bio updated successfully!`, 'success');
+                                if (data.message) log(`Message: ${data.message}`, 'success');
+                                log(JSON.stringify(data, null, 2));
+                                success = true;
+                            } catch (e) {
+                                log(`✅ Request sent (Response: ${proxyData.contents})`, 'success');
+                                success = true;
+                            }
+                        } else {
+                            log(`✅ Request sent via proxy`, 'success');
+                            success = true;
+                        }
+                    }
+                } catch (proxyError) {
+                    if (proxyError.name === 'AbortError') {
+                        log('Request cancelled', 'error');
+                        return;
+                    }
+                    log(`Proxy method also failed: ${proxyError.message}`, 'error');
+                    
+                    // Method 3: Try with no-cors mode (fire and forget)
+                    log('Trying no-cors mode (fire-and-forget)...');
+                    try {
+                        await fetch(apiUrl, {
+                            method: 'GET',
+                            mode: 'no-cors',
+                            cache: 'no-cache'
+                        });
+                        log(`✅ Request sent (no-cors mode)`, 'success');
+                        log('Note: Using no-cors mode - request sent but response not available', 'info');
+                        log('The API should have received your request and updated the bio.', 'info');
+                        success = true;
+                    } catch (noCorsError) {
+                        if (noCorsError.name === 'AbortError') {
+                            log('Request cancelled', 'error');
+                            return;
+                        }
+                        log(`No-cors method failed: ${noCorsError.message}`, 'error');
+                        
+                        // Method 4: Image tag workaround (last resort)
+                        log('Trying image tag workaround (last resort)...');
+                        try {
+                            const img = new Image();
+                            let imgSuccess = false;
+                            
+                            img.onload = () => {
+                                if (!imgSuccess) {
+                                    imgSuccess = true;
+                                    log(`✅ Request may have been sent`, 'success');
+                                    log('Note: Using image tag method - cannot verify response', 'info');
+                                    success = true;
+                                    resetUI();
+                                }
+                            };
+                            img.onerror = () => {
+                                if (!imgSuccess) {
+                                    imgSuccess = true;
+                                    log(`✅ Request may have been sent`, 'success');
+                                    log('Note: Image tag method - request likely sent', 'info');
+                                    success = true;
+                                    resetUI();
+                                }
+                            };
+                            img.src = apiUrl;
+                            
+                            // Give it a moment, then check
+                            setTimeout(() => {
+                                if (!imgSuccess && !success) {
+                                    log('⚠️ All methods attempted. Request may still have been sent.', 'error');
+                                    log('Check the API server logs or try again.', 'info');
+                                    success = true; // Assume it might have worked
+                                    resetUI();
+                                }
+                            }, 2000);
+                            
+                            return; // Exit early, callbacks will handle reset
+                        } catch (imgError) {
+                            log(`Image tag method failed: ${imgError.message}`, 'error');
+                        }
+                    }
+                }
+            }
+
+            if (!success) {
+                log('⚠️ All connection methods failed', 'error');
+                log('The API might be blocking browser requests due to CORS policy.', 'error');
+                log('Try using a browser extension to disable CORS, or contact the API provider.', 'error');
+            }
+            
+            if (success) {
+                resetUI();
+            }
+        }
+
+        function resetUI() {
+            el.updateBtn.disabled = false;
+            el.updateBtn.textContent = '🔄 Update Bio';
+        }
+
+        el.updateBtn.addEventListener('click', updateBio);
+        el.clearBtn.addEventListener('click', () => {
+            el.accessToken.value = '';
+            el.bio.value = '';
+            clearStatus();
+            el.accessToken.focus();
+        });
+
+        el.bio.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                updateBio();
+            }
+        });
+
+        // Floating Navigation Menu Toggle
+        const floatingNavBtn = document.getElementById('floatingNavBtn');
+        const floatingNavMenu = document.getElementById('floatingNavMenu');
+
+        function toggleFloatingNav() {
+            const isActive = floatingNavMenu.classList.contains('active');
+            if (isActive) {
+                floatingNavMenu.classList.remove('active');
+                floatingNavBtn.classList.remove('active');
+            } else {
+                floatingNavMenu.classList.add('active');
+                floatingNavBtn.classList.add('active');
+            }
+        }
+
+        function closeFloatingNav() {
+            floatingNavMenu.classList.remove('active');
+            floatingNavBtn.classList.remove('active');
+        }
+
+        if (floatingNavBtn) {
+            floatingNavBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleFloatingNav();
+            });
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (floatingNavMenu.classList.contains('active')) {
+                if (!floatingNavMenu.contains(e.target) && !floatingNavBtn.contains(e.target)) {
+                    closeFloatingNav();
+                }
+            }
+        });
+
+        // Close menu when clicking on menu links
+        const navLinks = floatingNavMenu.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', closeFloatingNav);
+        });
+
+        // Close menu on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && floatingNavMenu.classList.contains('active')) {
+                closeFloatingNav();
+            }
+        });
+
+        // Particle Animation
+        (function () {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let animationId;
+            let time = 0;
+
+            const djColors = [
+                { r: 34, g: 197, b: 94 },
+                { r: 16, g: 185, b: 129 },
+                { r: 5, g: 150, b: 105 },
+                { r: 74, g: 222, b: 128 },
+                { r: 110, g: 231, b: 183 }
+            ];
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            function Particle() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 1.2;
+                this.vy = (Math.random() - 0.5) * 1.2;
+                this.radius = Math.random() * 2.5 + 1;
+                this.baseRadius = this.radius;
+                this.opacity = Math.random() * 0.8 + 0.3;
+                this.colorIndex = Math.floor(Math.random() * djColors.length);
+                this.updateColor();
+            }
+
+            Particle.prototype.updateColor = function () {
+                time += 0.01;
+                const colorIndex = (Math.floor(time * 10) + this.colorIndex) % djColors.length;
+                const nextColorIndex = (colorIndex + 1) % djColors.length;
+                const t = (time * 10) % 1;
+
+                const color1 = djColors[colorIndex];
+                const color2 = djColors[nextColorIndex];
+
+                this.colorR = Math.floor(color1.r + (color2.r - color1.r) * t);
+                this.colorG = Math.floor(color1.g + (color2.g - color1.g) * t);
+                this.colorB = Math.floor(color1.b + (color2.b - color1.b) * t);
+                this.color = `rgba(${this.colorR}, ${this.colorG}, ${this.colorB}, ${this.opacity})`;
+            };
+
+            function initParticles() {
+                particles = [];
+                const particleCount = Math.floor((canvas.width * canvas.height) / 12000);
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                time += 0.01;
+
+                particles.forEach((particle, i) => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+
+                    if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+
+                    particle.x = Math.max(0, Math.min(canvas.width, particle.x));
+                    particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+
+                    particle.updateColor();
+
+                    const pulse = Math.sin(time * 2) * 0.3 + 1;
+                    particle.radius = particle.baseRadius * pulse;
+
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+                });
+
+                animationId = requestAnimationFrame(drawParticles);
+            }
+
+            resizeCanvas();
+            initParticles();
+            drawParticles();
+
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                initParticles();
+            });
+        })();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GET ACCESS TOKEN</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --bg-primary: #0a1a2e;
+      --bg-secondary: #1a1a3e;
+      --bg-card: rgba(255, 255, 255, 0.05);
+      --accent: #ff2b2b;
+      --accent-hover: #ff4444;
+      --accent-glow: rgba(255, 43, 43, 0.3);
+      --text-primary: #ffffff;
+      --text-secondary: #a0aec0;
+      --border: rgba(255, 255, 255, 0.1);
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(255, 43, 43, 0.1) 0%, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(255, 43, 43, 0.08) 0%, transparent 50%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      position: relative;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeInDown 0.6s ease-out;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo-container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 40px rgba(255, 43, 43, 0.3);
+      transition: transform 0.3s ease;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .logo-container:hover {
+      transform: scale(1.05) rotate(5deg);
+    }
+
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .logo-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #ffffff, var(--accent-hover));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 50px;
+      font-size: 0.875rem;
+      color: var(--success);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      animation: fadeInUp 0.6s ease-out 0.2s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .section-title h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .section-title p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    /* PROVIDERS GRID */
+    .providers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .providers-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .providers-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    .provider-card {
+      position: relative;
+      padding: 2rem 1.5rem;
+      border-radius: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .provider-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), #ff4444);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .provider-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 30px var(--accent-glow);
+      background: rgba(255, 43, 43, 0.1);
+    }
+
+    .provider-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .provider-card:active {
+      transform: translateY(-4px) scale(0.98);
+    }
+
+    .provider-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      font-size: 2rem;
+    }
+
+    .provider-card:hover .provider-icon {
+      background: rgba(255, 43, 43, 0.2);
+      transform: scale(1.1) rotate(5deg);
+      border-color: var(--accent);
+    }
+
+    .provider-name {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+      transition: color 0.3s ease;
+    }
+
+    .provider-card:hover .provider-name {
+      color: var(--accent-hover);
+    }
+
+    .provider-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .provider-badge {
+      display: inline-block;
+      padding: 0.375rem 0.75rem;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 6px;
+      color: var(--success);
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      transition: all 0.3s ease;
+    }
+
+    .provider-card:hover .provider-badge {
+      background: rgba(16, 185, 129, 0.25);
+      transform: scale(1.05);
+    }
+
+    /* CLICK ANIMATION */
+    .provider-card.clicked {
+      animation: clickPulse 0.5s ease;
+    }
+
+    @keyframes clickPulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 43, 43, 0.7); }
+      70% { box-shadow: 0 0 0 20px rgba(255, 43, 43, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 43, 43, 0); }
+    }
+
+    /* FOCUS STATES */
+    .provider-card:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      body {
+        padding: 1rem;
+      }
+
+      .header h1 {
+        font-size: 1.75rem;
+      }
+
+      .providers-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .provider-card {
+        padding: 1.5rem 1rem;
+      }
+    }
+
+    /* SMOOTH SCROLLING */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* FLOATING NAVIGATION */
+    .floating-nav-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent) 0%, #ff4444 100%);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(255, 43, 43, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .floating-nav-btn:hover {
+      transform: scale(1.1) rotate(90deg);
+      box-shadow: 0 8px 30px rgba(255, 43, 43, 0.6);
+    }
+
+    .floating-nav-btn.active {
+      transform: rotate(45deg);
+      background: linear-gradient(135deg, #ff4444 0%, #cc2222 100%);
+    }
+
+    .floating-nav-menu {
+      position: fixed;
+      top: 90px;
+      right: 20px;
+      width: 280px;
+      max-width: calc(100vw - 40px);
+      background: rgba(26, 31, 53, 0.95);
+      backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 43, 43, 0.2);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      z-index: 99;
+      padding: 20px;
+      opacity: 0;
+      transform: translateY(-20px) scale(0.95);
+      pointer-events: none;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .floating-nav-menu.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: all;
+    }
+
+    .floating-nav-menu .menu-header {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .floating-nav-menu .menu-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent) 0%, #ff4444 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .floating-nav-menu .menu-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .floating-nav-menu .nav-btn {
+      width: 100%;
+      margin-bottom: 10px;
+      min-height: 48px;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      justify-content: flex-start;
+      gap: 10px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      color: #fff;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      box-sizing: border-box;
+      font-weight: 600;
+    }
+
+    .floating-nav-menu .nav-btn:last-child {
+      margin-bottom: 0;
+    }
+
+    .floating-nav-menu .nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .floating-nav-btn {
+        width: 52px;
+        height: 52px;
+        font-size: 1.6rem;
+        top: 16px;
+        right: 16px;
+      }
+
+      .floating-nav-menu {
+        top: 80px;
+        right: 16px;
+        left: 16px;
+        width: auto;
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .floating-nav-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 1.4rem;
+        top: 12px;
+        right: 12px;
+      }
+
+      .floating-nav-menu {
+        top: 72px;
+        right: 12px;
+        left: 12px;
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating Navigation Button -->
+  <button class="floating-nav-btn" id="floatingNavBtn" title="Navigation Menu">☰</button>
+
+  <!-- Floating Navigation Menu -->
+  <div class="floating-nav-menu" id="floatingNavMenu">
+    <div class="menu-header">
+      <div class="menu-title">Navigation Menu</div>
+      <div class="menu-subtitle">Quick Access</div>
+    </div>
+    <a href="long-bio.html" class="nav-btn"
+      style="background: linear-gradient(135deg, var(--accent) 0%, #ff4444 100%); box-shadow: 0 4px 15px rgba(255, 43, 43, 0.3);">
+      📝 Long Bio Update
+    </a>
+  </div>
+
+  <div class="container">
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo-container">
+        <img src="logo.png" alt="Logo" class="logo-img" onerror="this.onerror=null; this.src='logo.jpg'; this.onerror=function(){this.style.display='none'; this.nextElementSibling.style.display='flex';};">
+        <div class="logo-text" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; background:linear-gradient(135deg, var(--accent), #ff4444);">M272</div>
+      </div>
+      <h1>Access Token System</h1>
+      <p>Choose your authentication provider</p>
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        <span>SYSTEM ONLINE</span>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="section-title">
+        <h2>Authentication Providers</h2>
+        <p>Select a provider to begin the authentication process</p>
+      </div>
+
+      <div class="providers-grid">
+        <!-- Facebook -->
+        <a class="provider-card" href="https://auth.garena.com/universal/oauth?platform=3&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-ticket.ff.gameid.garena.co.id/oauth/callback_redirect/" id="facebook-provider">
+          <div class="provider-icon">
+            <i class="fab fa-facebook" style="color:#1877f2"></i>
+          </div>
+          <div class="provider-name">Facebook</div>
+          <div class="provider-id">ID: 3</div>
+          <div class="provider-badge">ACTIVE</div>
+        </a>
+
+        <!-- Google -->
+        <a class="provider-card" href="https://auth.garena.com/universal/oauth?platform=8&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-ticket.ff.gameid.garena.co.id/oauth/callback_redirect/" id="google-provider">
+          <div class="provider-icon">
+            <i class="fab fa-google" style="color:#ea4335"></i>
+          </div>
+          <div class="provider-name">Google</div>
+          <div class="provider-id">ID: 8</div>
+          <div class="provider-badge">ACTIVE</div>
+        </a>
+
+        <!-- Apple -->
+        <a class="provider-card" href="https://auth.garena.com/universal/oauth?platform=10&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-ticket.ff.gameid.garena.co.id/oauth/callback_redirect/" id="apple-provider">
+          <div class="provider-icon">
+            <i class="fab fa-apple" style="color:#ffffff"></i>
+          </div>
+          <div class="provider-name">Apple</div>
+          <div class="provider-id">ID: 10</div>
+          <div class="provider-badge">ACTIVE</div>
+        </a>
+
+        <!-- Twitter -->
+        <a class="provider-card" href="https://auth.garena.com/universal/oauth?platform=11&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-ticket.ff.gameid.garena.co.id/oauth/callback_redirect/" id="twitter-provider">
+          <div class="provider-icon">
+            <i class="fab fa-twitter" style="color:#1da1f2"></i>
+          </div>
+          <div class="provider-name">Twitter</div>
+          <div class="provider-id">ID: 11</div>
+          <div class="provider-badge">ACTIVE</div>
+        </a>
+
+        <!-- VK -->
+        <a class="provider-card" href="https://auth.garena.com/universal/oauth?platform=5&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-ticket.ff.gameid.garena.co.id/oauth/callback_redirect/" id="vk-provider">
+          <div class="provider-icon">
+            <i class="fab fa-vk" style="color:#4c75a3"></i>
+          </div>
+          <div class="provider-name">VKontakte</div>
+          <div class="provider-id">ID: 5</div>
+          <div class="provider-badge">ACTIVE</div>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const providerCards = document.querySelectorAll('.provider-card');
+      
+      providerCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+          // Add click animation
+          this.classList.add('clicked');
+          
+          // Remove animation class after completion
+          setTimeout(() => {
+            this.classList.remove('clicked');
+          }, 500);
+        });
+        
+        // Enhanced hover effects
+        card.addEventListener('mouseenter', function() {
+          this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        });
+      });
+
+      // Floating Navigation Menu Toggle
+      const floatingNavBtn = document.getElementById('floatingNavBtn');
+      const floatingNavMenu = document.getElementById('floatingNavMenu');
+
+      function toggleFloatingNav() {
+        const isActive = floatingNavMenu.classList.contains('active');
+        if (isActive) {
+          floatingNavMenu.classList.remove('active');
+          floatingNavBtn.classList.remove('active');
+        } else {
+          floatingNavMenu.classList.add('active');
+          floatingNavBtn.classList.add('active');
+        }
+      }
+
+      function closeFloatingNav() {
+        floatingNavMenu.classList.remove('active');
+        floatingNavBtn.classList.remove('active');
+      }
+
+      if (floatingNavBtn) {
+        floatingNavBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleFloatingNav();
+        });
+      }
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (floatingNavMenu.classList.contains('active')) {
+          if (!floatingNavMenu.contains(e.target) && !floatingNavBtn.contains(e.target)) {
+            closeFloatingNav();
+          }
+        }
+      });
+
+      // Close menu when clicking on menu links
+      const navLinks = floatingNavMenu.querySelectorAll('a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', closeFloatingNav);
+      });
+
+      // Close menu on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && floatingNavMenu.classList.contains('active')) {
+          closeFloatingNav();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
